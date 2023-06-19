@@ -1,35 +1,47 @@
-use std::{io, cmp::Ordering};
 use rand::Rng;
+use std::cmp::Ordering;
+
 fn main() {
-    println!("Welcome to Guess the Number Game");
-
-    let secret_number = rand::thread_rng().gen_range(1..=100); 
-    //genera numero aleatorio
-    println!("el numero aleatorio es {secret_number}");
-
-
+    println!("welcome to guessing game");
+    let random = rand::thread_rng().gen_range(0,101);
+    let mut vidas: i8 = 10;
     loop {
-        println!("Please enter a number: ");
-
-        let mut number = String::new();
-        io::stdin()
-            .read_line(&mut number)
-            .expect("failed");
-        println!("{}", number);
-        println!("{}", number.trim());
-        let number: u32 = match number.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-        match number.cmp(&secret_number) {
-            Ordering::Less => println!("el numero es muy bajito"),
-            Ordering::Greater => println!("el numero es muy grande"),
-            Ordering::Equal => {
-                println!("adivinaste muy bien");
-                break;
-            }
-    
-
+    println!("please enter a number: ");
+    let mut guess = String::new();
+    std::io::stdin().read_line(&mut guess).expect("error");  
+    let guess: u32 =match guess.trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("error con tu input");
+            continue;
         }
+    };
+        
+    match guess.cmp(&random){
+        Ordering::Less => {
+            vidas = vidas - 1;
+            println!("Ups el numero es muy bajo")
+        },
+        Ordering::Greater => {
+            vidas = vidas - 1;
+            println!("Ups el numero es muy alto")
+        },
+        Ordering::Equal => {
+            println!("eeeeyyyy ganaste el numero era {random}");
+            break;
+            
+        }
+    
+    };
+    
+    if vidas == 0{
+        println!("te quedaste sin vidas ;(");
+        break;
+    }
+    println!("tenes {vidas} vidas")
+    
 }
+    
+    
+     
 }
